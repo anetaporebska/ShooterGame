@@ -3,10 +3,16 @@ class Field:
         #TODO ?: pole FieldType mozna sie niby pobawic np w wode, 
         #przechodzenie przez ktora by spowalnialo, albo jakies rozne kolory plansz?
         self.isWall=isWall
-        self.otherObject=None
+        self.booster=None
+        self.Playe=None
     def isEmpty(self):
-        if(not self.isWall and self.otherObject==None):
+        if(not self.isWall and self.booster==None and self.Player=None):
             return True
-    def isWall(self):
+        return False
+    def is_wall(self):
         return self.isWall
-    #TODO: Stworzenie tekstur, no zrobiłbym coś na gracza, boostery, może ściany i podłoże
+    def is_booster(self):
+        return self.booster==None
+    def is_player(self):
+        return self.player==None
+    #TODO: Stworzenie tekstur, no na pewno zrobiłbym coś na gracza i boostery, może ściany i podłoże
