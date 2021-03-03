@@ -1,0 +1,23 @@
+from random import randrange
+class rapid_fire:
+    def __init__(self,time):
+        self.time=time
+
+
+class healing:
+    def __init__(self,maxHP):
+        self.extraHP=maxHP/4
+
+
+class new_shoes:
+    def __init__(self,time):
+        self.time=time
+
+
+class boosters:
+    def __init__(self):
+        type=randrange(0,2,1)
+        if type==0:
+            self.type=rapid_fire()
+        elif type==1:
+            self.type=healing()
