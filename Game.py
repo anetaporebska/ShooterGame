@@ -9,6 +9,11 @@ INITIAL_POSITION_2 = (900,900)
 WIDTH = 1000
 HEIGHT = 1000
 
+BLOCK_SIZE = 50
+
+BOARD_WIDTH = int( WIDTH/BLOCK_SIZE)
+BOARD_HEIGHT = int(HEIGHT/BLOCK_SIZE)
+
 WINDOW = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Shooter Game")
 
@@ -17,7 +22,7 @@ FPS = 100
 player1 = Player(INITIAL_HP, INITIAL_POSITION_1)
 player2 = Player(INITIAL_HP, INITIAL_POSITION_2)
 
-board = Board(20,20,2)
+board = Board(BOARD_HEIGHT, BOARD_WIDTH,2, BLOCK_SIZE)
 
 def redraw_window(): #TODO
     board.draw(WINDOW)

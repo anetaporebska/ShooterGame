@@ -12,17 +12,18 @@ może się przesuwać co 1 piksel; reszta obiektów może leżeć w tych kwadrac
 """
 
 class Board:
-    def __init__(self, width: int, height: int, mapVersion: int):
+    def __init__(self, width: int, height: int, mapVersion: int, block_size: int):
         self.height=height
         self.width=width
         self.board=[]
+        self.block_size = block_size
         for i in range(width):
             self.board.append([])
 #        TODO: wygenerowanie najlepiej paru plansz, w sensie wstawienie scian
         if(mapVersion == 1):
             for row in self.board:
                 for j in range(height):
-                    row.append(Field(False, None, None)) # proponuję zamiast Field wstawiać rzeczywiste obiekty typu Player, Wall etc
+                    row.append(Field(False, None, None, block_size)) # proponuję zamiast Field wstawiać rzeczywiste obiekty typu Player, Wall etc
                                                         # każdy obiekt mógłby mieć metodę get_type() która zwracała by np. stringa
 
         # to jest jakaś przykładowa mapa, która ma ściany na obrzeżach
@@ -30,15 +31,17 @@ class Board:
             for i in range(len(self.board)):
                 for j in range(height):
                     if i==0 or j==0 or i==height-1 or j==width-1:
-                        self.board[i].append(Wall(i*50, j*50))
+                        self.board[i].append(Wall(i*block_size, j*block_size, block_size))
                     else:
-                        self.board[i].append(Field(False, i*50, j*50))
+                        self.board[i].append(Field(False, i*block_size, j*block_size, block_size))
 
     def draw(self, window):
         for i in range(self.height):
             for j in range(self.width):
                 self.board[i][j].draw(window)
 
-
+    def place_booster(self, x, y):
+        # TODO
+        pass
 
 
