@@ -4,9 +4,9 @@ class Field:
         #przechodzenie przez ktora by spowalnialo, albo jakies rozne kolory plansz?
         self.isWall=isWall
         self.booster=None
-        self.Playe=None
+        self.player=None
     def isEmpty(self):
-        if(not self.isWall and self.booster==None and self.Player=None):
+        if(not self.isWall and self.booster==None and self.player==None):
             return True
         return False
     def is_wall(self):
