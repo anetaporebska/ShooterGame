@@ -1,9 +1,10 @@
 import pygame
 from Player import Player
+from Board import Board
 
 INITIAL_HP = 100
-INITIAL_POSITION_1 = (0,0)
-INITIAL_POSITION_2 = (950,950)
+INITIAL_POSITION_1 = (50,50)
+INITIAL_POSITION_2 = (900,900)
 
 WIDTH = 1000
 HEIGHT = 1000
@@ -16,7 +17,10 @@ FPS = 100
 player1 = Player(INITIAL_HP, INITIAL_POSITION_1)
 player2 = Player(INITIAL_HP, INITIAL_POSITION_2)
 
+board = Board(20,20,2)
+
 def redraw_window(): #TODO
+    board.draw(WINDOW)
     player1.draw(WINDOW)
     player2.draw(WINDOW)
     pygame.display.update()
@@ -39,6 +43,7 @@ def run_game():
             if event.type == pygame.QUIT:
                 run = False
 
+        # TODO: zrobić to ładniej; na razie działa
         keys = pygame.key.get_pressed()     # dictionary
         if keys[pygame.K_DOWN]:
             player2.move(0, 1)
