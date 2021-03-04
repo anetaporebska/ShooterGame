@@ -34,6 +34,11 @@ class Board:
                         self.board[i].append(Wall(i*block_size, j*block_size, block_size))
                     else:
                         self.board[i].append(Field(False, i*block_size, j*block_size, block_size))
+        elif (mapVersion==3):
+            for i in range(len(self.board)):
+                for j in range(height):
+                    self.board[i].append(Field(False, i*block_size, j*block_size, block_size))
+
 
     def draw(self, window):
         for i in range(self.height):

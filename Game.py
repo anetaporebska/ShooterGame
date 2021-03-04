@@ -11,7 +11,7 @@ HEIGHT = 1000
 
 BLOCK_SIZE = 50
 
-BOARD_WIDTH = int( WIDTH/BLOCK_SIZE)
+BOARD_WIDTH = int(WIDTH/BLOCK_SIZE)
 BOARD_HEIGHT = int(HEIGHT/BLOCK_SIZE)
 
 WINDOW = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -19,7 +19,9 @@ pygame.display.set_caption("Shooter Game")
 
 FPS = 100
 
-board = Board(BOARD_HEIGHT, BOARD_WIDTH,2, BLOCK_SIZE)
+MAP_VERSION = 3
+
+board = Board(BOARD_HEIGHT, BOARD_WIDTH,MAP_VERSION, BLOCK_SIZE)
 
 player1 = Player(INITIAL_HP, INITIAL_POSITION_1, board, BLOCK_SIZE)
 player2 = Player(INITIAL_HP, INITIAL_POSITION_2, board, BLOCK_SIZE)
