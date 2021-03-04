@@ -28,4 +28,7 @@ class Field:
     def draw(self, window):
         pygame.draw.rect(window, (0,0,0), (self.position_x, self.position_y, self.block_size, self.block_size))
 
+    def get_type(self):
+        return "field"
+
     #TODO: Stworzenie tekstur, no na pewno zrobiłbym coś na gracza i boostery, może ściany i podłoże

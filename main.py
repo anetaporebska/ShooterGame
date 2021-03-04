@@ -1,1 +1,3 @@
-print("tu będzie nasz projekt")
+from Game import run_game
+
+run_game()

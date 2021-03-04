@@ -45,3 +45,11 @@ class Board:
         pass
 
 
+    # zwraca informację o tym jaki obiekt znajduje się na danej pozycji
+    # x i y są współrzędnymi lewego górnego wierzchołka postaci (w pikselach)
+    def check_position(self, x, y):
+        board_x = int(x / self.block_size)
+        board_y = int(y / self.block_size)
+        return self.board[board_x][board_y].get_type()
+
+

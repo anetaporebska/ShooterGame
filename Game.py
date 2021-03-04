@@ -4,7 +4,7 @@ from Board import Board
 
 INITIAL_HP = 100
 INITIAL_POSITION_1 = (50,50)
-INITIAL_POSITION_2 = (900,900)
+INITIAL_POSITION_2 = (899,899)
 
 WIDTH = 1000
 HEIGHT = 1000
@@ -19,15 +19,18 @@ pygame.display.set_caption("Shooter Game")
 
 FPS = 100
 
-player1 = Player(INITIAL_HP, INITIAL_POSITION_1)
-player2 = Player(INITIAL_HP, INITIAL_POSITION_2)
-
 board = Board(BOARD_HEIGHT, BOARD_WIDTH,2, BLOCK_SIZE)
 
-def redraw_window(): #TODO
+player1 = Player(INITIAL_HP, INITIAL_POSITION_1, board, BLOCK_SIZE)
+player2 = Player(INITIAL_HP, INITIAL_POSITION_2, board, BLOCK_SIZE)
+
+
+
+def redraw_window():
     board.draw(WINDOW)
     player1.draw(WINDOW)
     player2.draw(WINDOW)
+    # TODO paski życia
     pygame.display.update()
 
 
@@ -74,5 +77,3 @@ def run_game():
 
         # print(player1.position_x, player1.position_y, player2.position_x, player2.position_y)
 
-
-run_game()
