@@ -27,14 +27,14 @@ class Board:
                                                         # każdy obiekt mógłby mieć metodę get_type() która zwracała by np. stringa
 
         # to jest jakaś przykładowa mapa, która ma ściany na obrzeżach
-        elif(mapVersion==2):
+        elif mapVersion == 2:
             for i in range(len(self.board)):
                 for j in range(height):
                     if i==0 or j==0 or i==height-1 or j==width-1:
                         self.board[i].append(Wall(i*block_size, j*block_size, block_size))
                     else:
                         self.board[i].append(Field(False, i*block_size, j*block_size, block_size))
-        elif (mapVersion==3):
+        elif mapVersion == 3:
             for i in range(len(self.board)):
                 for j in range(height):
                     self.board[i].append(Field(False, i*block_size, j*block_size, block_size))

@@ -3,8 +3,8 @@ from Player import Player
 from Board import Board
 
 INITIAL_HP = 100
-INITIAL_POSITION_1 = (50,50)
-INITIAL_POSITION_2 = (899,899)
+INITIAL_POSITION_1 = (50,475)
+INITIAL_POSITION_2 = (900,475)
 
 WIDTH = 1000
 HEIGHT = 1000
@@ -19,7 +19,7 @@ pygame.display.set_caption("Shooter Game")
 
 FPS = 100
 
-MAP_VERSION = 3
+MAP_VERSION = 2
 
 board = Board(BOARD_HEIGHT, BOARD_WIDTH,MAP_VERSION, BLOCK_SIZE)
 
@@ -77,5 +77,5 @@ def run_game():
         if keys[pygame.K_SPACE]:
             player1.shoot()
 
-        # print(player1.position_x, player1.position_y, player2.position_x, player2.position_y)
+
 

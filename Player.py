@@ -26,7 +26,7 @@ class Player:
 
     def move(self, change_x, change_y):
         # TODO sprawdzać czy nie wchodzi w drugiego gracza + czy nie zebrał boosta
-        new_position_x = self.position_x +change_x * self.movementSpeed
+        new_position_x = self.position_x + change_x * self.movementSpeed
         new_position_y = self.position_y + change_y*self.movementSpeed
 
         lower_right_x = new_position_x+self.block_size
@@ -50,8 +50,6 @@ class Player:
         if upper_object_type == "field" and lower_object_type == "field":
             self.position_x = new_position_x
             self.position_y = new_position_y
-
-
 
 
 
