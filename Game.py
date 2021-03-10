@@ -1,6 +1,7 @@
 import pygame
 from Player import Player
 from Board import Board
+from bullets import ActiveBullets
 
 INITIAL_HP = 100
 INITIAL_POSITION_1 = (50,475)
@@ -23,13 +24,14 @@ MAP_VERSION = 2
 
 board = Board(BOARD_HEIGHT, BOARD_WIDTH,MAP_VERSION, BLOCK_SIZE)
 
-player1 = Player(INITIAL_HP, INITIAL_POSITION_1, board, BLOCK_SIZE)
-player2 = Player(INITIAL_HP, INITIAL_POSITION_2, board, BLOCK_SIZE)
+player1 = Player(INITIAL_HP, INITIAL_POSITION_1, board, BLOCK_SIZE,1, (255, 0, 0))
+player2 = Player(INITIAL_HP, INITIAL_POSITION_2, board, BLOCK_SIZE,2, (0, 255, 0))
 
-
+active_bullets = ActiveBullets()
 
 def redraw_window():
     board.draw(WINDOW)
+    active_bullets.draw(WINDOW)
     player1.draw(WINDOW)
     player2.draw(WINDOW)
     # TODO paski życia
@@ -43,6 +45,7 @@ def redraw_window():
 
 def run_game():
     run = True
+
     clock = pygame.time.Clock()
 
     while run:
@@ -64,7 +67,7 @@ def run_game():
         if keys[pygame.K_RIGHT]:
             player2.move(1,0)
         if keys[pygame.K_RETURN]:
-            player2.shoot()
+            player2.shoot(active_bullets)
 
         if keys[pygame.K_s]:
             player1.move(0, 1)
@@ -75,7 +78,7 @@ def run_game():
         if keys[pygame.K_d]:
             player1.move(1, 0)
         if keys[pygame.K_SPACE]:
-            player1.shoot()
+            player1.shoot(active_bullets)
 
 
 

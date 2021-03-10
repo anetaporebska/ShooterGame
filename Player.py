@@ -1,20 +1,23 @@
 import pygame
+from bullets import Bullet
 INITIAL_SHOOT_DAMAGE = 10
 
 
 class Player:
 
-    def __init__(self, HP: int, initial_position, board, block_size):
+    def __init__(self, HP: int, initial_position, board, block_size, no, color):
+        self.no = no    # numer gracza (1 lub 2)
         self.HP = HP
         self.movementSpeed = 1
         self.shootingSpeed = 1
-        self.direction = None
+        self.orientation = (0,1)   # orientacja, w która stronę jest zwrócony (zależna od ostatniego ruchu)
         self.position_x = initial_position[0]
         self.position_y = initial_position[1]
         self.block_size = block_size
         self.shoot_damage = INITIAL_SHOOT_DAMAGE
         # TODO shoot range?
         self.board = board
+        self.color = color
 
     def take_damage(self, damage):
         self.HP -= damage
@@ -26,6 +29,8 @@ class Player:
 
     def move(self, change_x, change_y):
         # TODO sprawdzać czy nie wchodzi w drugiego gracza + czy nie zebrał boosta
+        self.update_orientation(change_x, change_y)
+
         new_position_x = self.position_x + change_x * self.movementSpeed
         new_position_y = self.position_y + change_y*self.movementSpeed
 
@@ -52,10 +57,18 @@ class Player:
             self.position_y = new_position_y
 
 
+    # TODO musi być jakieś opóźnienie co do możliwości kolejnego strzału, np. 0.5 sekundy
+    def shoot(self, active_bullets):
+        x = int(self.position_x + self.block_size/2)
+        y = int(self.position_y + self.block_size/2)
+        bullet = Bullet(x, y, self.shootingSpeed, self.color, self.no, self.orientation)
+        active_bullets.add_bullet(bullet)
 
-    def shoot(self):
-        # TODO
-        pass
+    def update_orientation(self, x, y):
+        self.orientation = (x,y)
+
+    #zwraca współrzędne "środka gracza" w zależności od tego w którą stronę jest zwrócony
+    #def middle_point(self):
 
     def draw(self, window):
-        pygame.draw.rect(window, (0,255, 0), (self.position_x, self.position_y, self.block_size, self.block_size))
+        pygame.draw.rect(window, self.color , (self.position_x, self.position_y, self.block_size, self.block_size))
