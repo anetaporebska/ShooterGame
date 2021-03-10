@@ -29,8 +29,11 @@ player2 = Player(INITIAL_HP, INITIAL_POSITION_2, board, BLOCK_SIZE,2, (0, 255, 0
 
 active_bullets = ActiveBullets()
 
+SHOOT_COOLDOWN = 500
+
 def redraw_window():
     board.draw(WINDOW)
+    active_bullets.move(board, player1, player2)
     active_bullets.draw(WINDOW)
     player1.draw(WINDOW)
     player2.draw(WINDOW)
@@ -47,6 +50,9 @@ def run_game():
     run = True
 
     clock = pygame.time.Clock()
+
+    player1_shoot_time = pygame.time.get_ticks()
+    player2_shoot_time = pygame.time.get_ticks()
 
     while run:
         clock.tick(FPS)
@@ -67,7 +73,10 @@ def run_game():
         if keys[pygame.K_RIGHT]:
             player2.move(1,0)
         if keys[pygame.K_RETURN]:
-            player2.shoot(active_bullets)
+            t = pygame.time.get_ticks()
+            if player2_shoot_time + SHOOT_COOLDOWN < t:
+                player2.shoot(active_bullets)
+                player2_shoot_time = t
 
         if keys[pygame.K_s]:
             player1.move(0, 1)
@@ -78,7 +87,17 @@ def run_game():
         if keys[pygame.K_d]:
             player1.move(1, 0)
         if keys[pygame.K_SPACE]:
-            player1.shoot(active_bullets)
+            t = pygame.time.get_ticks()
+            if player1_shoot_time + SHOOT_COOLDOWN < t:
+                player1.shoot(active_bullets)
+                player1_shoot_time = t
 
+        if not player1.is_alive():
+            print("Player 2 won!!!")
+            run = False
+
+        if not player2.is_alive():
+            print("Player 1 won!!!")
+            run = False
 
 

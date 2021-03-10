@@ -57,7 +57,6 @@ class Player:
             self.position_y = new_position_y
 
 
-    # TODO musi być jakieś opóźnienie co do możliwości kolejnego strzału, np. 0.5 sekundy
     def shoot(self, active_bullets):
         x = int(self.position_x + self.block_size/2)
         y = int(self.position_y + self.block_size/2)
@@ -67,8 +66,20 @@ class Player:
     def update_orientation(self, x, y):
         self.orientation = (x,y)
 
-    #zwraca współrzędne "środka gracza" w zależności od tego w którą stronę jest zwrócony
-    #def middle_point(self):
-
     def draw(self, window):
         pygame.draw.rect(window, self.color , (self.position_x, self.position_y, self.block_size, self.block_size))
+
+    def check_if_wounded(self, bullet, damage):
+        x = bullet.position_x
+        y = bullet.position_y
+
+        def point_inside(point_x, point_y):
+            return (self.position_x < point_x < self.position_x + self.block_size and
+                    self.position_y < point_y < self.position_y + self.block_size)
+
+        if point_inside(x, y) or point_inside(x + bullet.size_x, y) or point_inside(x, y+bullet.size_y) \
+                or point_inside(x + bullet.size_x, y + bullet.size_y):
+            self.take_damage(damage)
+            return True
+
+        return False

@@ -11,7 +11,7 @@ class Bullet:
         self.color = color # kolor chyba powinna mieć taki jak gracz
         self.size_x = 5
         self.size_y = 5
-        self.player = player   # 1 lub 2 w zależności który gracz wystrzelił
+        self.player = player   # 1 lub 2 w zależności który gracz wystrzelił pocisk
         self.orientation = orientation
 
     def draw(self, window):
@@ -24,16 +24,32 @@ class Bullet:
         self.position_y = new_position_y
 
 
-
 class ActiveBullets:
     def __init__(self):
-        # TODO docelowo to musi być inna struktura (nie lista), bo musimy w łatwy sposób usuwać/dodawać nowe pociski
-        self.bullets = []
+        self.bullets = set()
 
     def add_bullet(self, bullet):
-        self.bullets.append(bullet)
+        self.bullets.add(bullet)
+
+    def remove_bullet(self, bullet):
+        self.bullets.remove(bullet)
+
+    def move(self, board, player1, player2):
+        bullets_to_delete = set()
+        for bullet in self.bullets:
+            bullet.move()
+            if board.check_position(bullet.position_x, bullet.position_y) == "wall":
+                bullets_to_delete.add(bullet)
+
+            if bullet.player == 1 and player2.check_if_wounded(bullet, player1.shoot_damage):
+                bullets_to_delete.add(bullet)
+            elif bullet.player == 2 and player1.check_if_wounded(bullet, player2.shoot_damage):
+                bullets_to_delete.add(bullet)
+
+        for bullet in bullets_to_delete:
+            self.bullets.remove(bullet)
 
     def draw(self, window):
         for bullet in self.bullets:
-            bullet.move()
             bullet.draw(window)
+
