@@ -2,6 +2,7 @@ import pygame
 from Player import Player
 from Board import Board
 from bullets import ActiveBullets
+from health_bar import HealthBar
 
 INITIAL_HP = 100
 INITIAL_POSITION_1 = (50,475)
@@ -15,7 +16,7 @@ BLOCK_SIZE = 50
 BOARD_WIDTH = int(WIDTH/BLOCK_SIZE)
 BOARD_HEIGHT = int(HEIGHT/BLOCK_SIZE)
 
-WINDOW = pygame.display.set_mode((WIDTH, HEIGHT))
+WINDOW = pygame.display.set_mode((WIDTH, HEIGHT+20))    # +20 wysokości na paski życia
 pygame.display.set_caption("Shooter Game")
 
 FPS = 100
@@ -31,13 +32,20 @@ active_bullets = ActiveBullets()
 
 SHOOT_COOLDOWN = 500
 
+player1_health_bar = HealthBar(INITIAL_HP, 50, 1000, player1.color)
+player2_health_bar = HealthBar(INITIAL_HP, 850, 1000, player2.color)
+
+
 def redraw_window():
     board.draw(WINDOW)
     active_bullets.move(board, player1, player2)
     active_bullets.draw(WINDOW)
     player1.draw(WINDOW)
     player2.draw(WINDOW)
-    # TODO paski życia
+
+    player1_health_bar.update(player1.HP, WINDOW)
+    player2_health_bar.update(player2.HP, WINDOW)
+
     pygame.display.update()
 
 
