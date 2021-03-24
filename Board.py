@@ -30,7 +30,7 @@ class Board:
         elif mapVersion == 2:
             for i in range(len(self.board)):
                 for j in range(height):
-                    if i==0 or j==0 or i==height-1 or j==width-1:
+                    if i==0 or j==0 or i==height-1 or j==width-1 or (i==10 and j==10):
                         self.board[i].append(Wall(i*block_size, j*block_size, block_size))
                     else:
                         self.board[i].append(Field(i*block_size, j*block_size, block_size))

@@ -73,13 +73,13 @@ def run_game():
         # TODO: zrobić to ładniej; na razie działa
         keys = pygame.key.get_pressed()     # dictionary
         if keys[pygame.K_DOWN]:
-            player2.move(0, 1)
+            player2.move(0, 1, player1)
         if keys[pygame.K_UP]:
-            player2.move(0, -1)
+            player2.move(0, -1, player1)
         if keys[pygame.K_LEFT]:
-            player2.move(-1, 0)
+            player2.move(-1, 0, player1)
         if keys[pygame.K_RIGHT]:
-            player2.move(1,0)
+            player2.move(1,0, player1)
         if keys[pygame.K_RETURN]:
             t = pygame.time.get_ticks()
             if player2_shoot_time + SHOOT_COOLDOWN < t:
@@ -87,13 +87,13 @@ def run_game():
                 player2_shoot_time = t
 
         if keys[pygame.K_s]:
-            player1.move(0, 1)
+            player1.move(0, 1, player2)
         if keys[pygame.K_w]:
-            player1.move(0, -1)
+            player1.move(0, -1, player2)
         if keys[pygame.K_a]:
-            player1.move(-1, 0)
+            player1.move(-1, 0, player2)
         if keys[pygame.K_d]:
-            player1.move(1, 0)
+            player1.move(1, 0, player2)
         if keys[pygame.K_SPACE]:
             t = pygame.time.get_ticks()
             if player1_shoot_time + SHOOT_COOLDOWN < t:
