@@ -23,7 +23,7 @@ class Board:
         if(mapVersion == 1):
             for row in self.board:
                 for j in range(height):
-                    row.append(Field(False, None, None, block_size)) # proponuję zamiast Field wstawiać rzeczywiste obiekty typu Player, Wall etc
+                    row.append(Field(None, None, block_size)) # proponuję zamiast Field wstawiać rzeczywiste obiekty typu Player, Wall etc
                                                         # każdy obiekt mógłby mieć metodę get_type() która zwracała by np. stringa
 
         # to jest jakaś przykładowa mapa, która ma ściany na obrzeżach
@@ -33,11 +33,11 @@ class Board:
                     if i==0 or j==0 or i==height-1 or j==width-1:
                         self.board[i].append(Wall(i*block_size, j*block_size, block_size))
                     else:
-                        self.board[i].append(Field(False, i*block_size, j*block_size, block_size))
+                        self.board[i].append(Field(i*block_size, j*block_size, block_size))
         elif mapVersion == 3:
             for i in range(len(self.board)):
                 for j in range(height):
-                    self.board[i].append(Field(False, i*block_size, j*block_size, block_size))
+                    self.board[i].append(Field(i*block_size, j*block_size, block_size))
 
 
     def draw(self, window):
