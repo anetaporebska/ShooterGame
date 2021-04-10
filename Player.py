@@ -1,5 +1,6 @@
 import pygame
 from bullets import Bullet
+from weapons import Weapon
 
 INITIAL_SHOOT_DAMAGE = 10
 
@@ -18,19 +19,18 @@ class Player:
         self.position_y = initial_position[1]
         self.block_size = block_size
         self.shoot_damage = INITIAL_SHOOT_DAMAGE
-        # TODO shoot range?
         self.board = board
         self.color = color
+        self.weapons = [Weapon(200, 1, 1, 100, (255, 0, 152)), Weapon(100, 2, 2, 10, (255, 0, 82)), Weapon(500, 1, 2, 20, (152, 0, 82))]   #TODO dobrać sensowne parametry
+        self.weapon_idx = 0
+        self.current_weapon = self.weapons[self.weapon_idx]
 
     def take_damage(self, damage):
         self.HP -= damage
 
     def is_alive(self):
-        if self.HP > 0:
-            return True
-        return False
+        return self.HP > 0
 
-    # sprawdzam czy gracze nie wchodzą w siebie
     def check_collision(self, new_x, new_y, other_player):
         y = other_player.position_y
         x = other_player.position_x
@@ -84,6 +84,7 @@ class Player:
             return True
 
         return False
+
     def use_booster(self, booster):
         if booster.type.get_name() == "healing":
             self.HP+=booster.type.get_extraHP(self.maxHP,self.HP)
@@ -97,6 +98,7 @@ class Player:
             self.shootingSpeedBoost=booster.type.get_time()
         elif booster.type.get_name() == "extraDamage":
             self.shoot_damage*=1,5
+
     def collect_booster(self, new_position_x, new_position_y):
         lower_right_x = new_position_x + self.block_size
         lower_right_y = new_position_y + self.block_size
@@ -116,8 +118,8 @@ class Player:
             self.use_booster(self.board.get_booster(lower_right_x, new_position_y))
 
     def move(self, change_x, change_y, other_player):
-        # TODO sprawdzać czy nie zebrał boosta
         self.update_orientation(change_x, change_y)
+
 
         new_position_x = self.position_x + change_x * self.movementSpeed
         new_position_y = self.position_y + change_y * self.movementSpeed
@@ -132,23 +134,28 @@ class Player:
             return
 
         self.collect_booster(new_position_x,new_position_y)
-
         self.position_x = new_position_x
         self.position_y = new_position_y
 
-
-
     def shoot(self, active_bullets):
+        # TODO sprawdzić czy ma amunicję
         x = int(self.position_x + self.block_size / 2)
         y = int(self.position_y + self.block_size / 2)
-        bullet = Bullet(x, y, self.shootingSpeed, self.color, self.no, self.orientation)
+        speed = self.shootingSpeed*self.current_weapon.speed
+        bullet = Bullet(x, y, speed, self.color, self.no, self.orientation, self.current_weapon.range)
         active_bullets.add_bullet(bullet)
+        self.current_weapon.use_ammunition()
 
     def update_orientation(self, x, y):
         self.orientation = (x, y)
 
     def draw(self, window):
         pygame.draw.rect(window, self.color, (self.position_x, self.position_y, self.block_size, self.block_size))
+        if self.no == 1:
+            x = 0
+        else:
+            x = 700
+        self.current_weapon.draw(window, x, 620)
 
     def check_if_wounded(self, bullet, damage):
         x = bullet.position_x
@@ -164,3 +171,13 @@ class Player:
             return True
 
         return False
+
+    def switch_weapon(self):
+        if self.weapon_idx + 1 == len(self.weapons):
+            self.weapon_idx = 0
+        else:
+            self.weapon_idx += 1
+        self.current_weapon = self.weapons[self.weapon_idx]
+
+    def get_damage(self):
+        return self.shoot_damage * self.current_weapon.damage

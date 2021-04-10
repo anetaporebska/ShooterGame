@@ -1,8 +1,9 @@
 import pygame
 
 
+
 class Bullet:
-    def __init__(self, x, y, movement_speed, color, player, orientation):
+    def __init__(self, x, y, movement_speed, color, player, orientation, range):
         # pozycja początkowa pocisku to niech będzie może środek gracza (z tej strony w którą jest skierowany)
 
         self.position_x = x
@@ -13,6 +14,8 @@ class Bullet:
         self.size_y = 5
         self.player = player   # 1 lub 2 w zależności który gracz wystrzelił pocisk
         self.orientation = orientation
+        self.range = range
+        self.distance = 0
 
     def draw(self, window):
         pygame.draw.rect(window, self.color, (self.position_x, self.position_y, self.size_x, self.size_y))
@@ -22,6 +25,8 @@ class Bullet:
         new_position_y = self.position_y + self.orientation[1]*self.movement_speed
         self.position_x = new_position_x
         self.position_y = new_position_y
+        self.distance = self.distance + abs(self.orientation[0]*self.movement_speed + self.orientation[1]*self.movement_speed)
+
 
 
 class ActiveBullets:
@@ -41,9 +46,13 @@ class ActiveBullets:
             if board.check_position(bullet.position_x, bullet.position_y) == "wall":
                 bullets_to_delete.add(bullet)
 
-            if bullet.player == 1 and player2.check_if_wounded(bullet, player1.shoot_damage):
+            if bullet.distance >= bullet.range:
                 bullets_to_delete.add(bullet)
-            elif bullet.player == 2 and player1.check_if_wounded(bullet, player2.shoot_damage):
+            damage1 = player1.get_damage()
+            damage2 = player2.get_damage()
+            if bullet.player == 1 and player2.check_if_wounded(bullet, damage1):
+                bullets_to_delete.add(bullet)
+            elif bullet.player == 2 and player1.check_if_wounded(bullet, damage2):
                 bullets_to_delete.add(bullet)
 
         for bullet in bullets_to_delete:

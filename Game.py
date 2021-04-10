@@ -18,7 +18,7 @@ BLOCK_SIZE = 50
 BOARD_WIDTH = int(WIDTH/BLOCK_SIZE)
 BOARD_HEIGHT = int(HEIGHT/BLOCK_SIZE)
 
-WINDOW = pygame.display.set_mode((WIDTH, HEIGHT+20))    # +20 wysokości na paski życia
+WINDOW = pygame.display.set_mode((WIDTH, HEIGHT+40 ))    # +20 wysokości na paski życia +20 na amunicję
 pygame.display.set_caption("Shooter Game")
 
 FPS = 100
@@ -52,8 +52,8 @@ def redraw_window():
 
 
 
-# player1 - AWSD + Space
-# player2 - arrows + Enter
+# player1 - AWSD + Space + lewy shift
+# player2 - arrows + Enter + prawy shift
 
 
 def run_game():
@@ -72,7 +72,6 @@ def run_game():
             if event.type == pygame.QUIT:
                 run = False
 
-        # TODO: zrobić to ładniej; na razie działa
         keys = pygame.key.get_pressed()     # dictionary
         if keys[pygame.K_DOWN]:
             player2.move(0, 1, player1)
@@ -87,6 +86,8 @@ def run_game():
             if player2_shoot_time + SHOOT_COOLDOWN < t:
                 player2.shoot(active_bullets)
                 player2_shoot_time = t
+        if keys[pygame.K_RSHIFT]:
+            player2.switch_weapon()
 
         if keys[pygame.K_s]:
             player1.move(0, 1, player2)
@@ -101,6 +102,9 @@ def run_game():
             if player1_shoot_time + SHOOT_COOLDOWN < t:
                 player1.shoot(active_bullets)
                 player1_shoot_time = t
+        if keys[pygame.K_LSHIFT]:
+            player1.switch_weapon()
+
 
         if not player1.is_alive():
             print("Player 2 won!!!")
