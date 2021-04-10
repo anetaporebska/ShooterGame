@@ -3,13 +3,15 @@ from Player import Player
 from Board import Board
 from bullets import ActiveBullets
 from health_bar import HealthBar
-
+from random import random
 INITIAL_HP = 100
-INITIAL_POSITION_1 = (50,475)
-INITIAL_POSITION_2 = (900,475)
+BOOSTERS_PER_SECOND=0.1 #Statystycznie
 
 WIDTH = 1000
-HEIGHT = 1000
+HEIGHT = 600
+
+INITIAL_POSITION_1 = (51,51)
+INITIAL_POSITION_2 = (WIDTH-101,HEIGHT-101)
 
 BLOCK_SIZE = 50
 
@@ -21,9 +23,9 @@ pygame.display.set_caption("Shooter Game")
 
 FPS = 100
 
-MAP_VERSION = 2
+MAP_VERSION = 1
 
-board = Board(BOARD_HEIGHT, BOARD_WIDTH,MAP_VERSION, BLOCK_SIZE)
+board = Board(BOARD_WIDTH, BOARD_HEIGHT,MAP_VERSION, BLOCK_SIZE)
 
 player1 = Player(INITIAL_HP, INITIAL_POSITION_1, board, BLOCK_SIZE,1, (255, 0, 0))
 player2 = Player(INITIAL_HP, INITIAL_POSITION_2, board, BLOCK_SIZE,2, (0, 255, 0))
@@ -32,8 +34,8 @@ active_bullets = ActiveBullets()
 
 SHOOT_COOLDOWN = 500
 
-player1_health_bar = HealthBar(INITIAL_HP, 50, 1000, player1.color)
-player2_health_bar = HealthBar(INITIAL_HP, 850, 1000, player2.color)
+player1_health_bar = HealthBar(INITIAL_HP, 50, HEIGHT, player1.color)
+player2_health_bar = HealthBar(INITIAL_HP, WIDTH-150, HEIGHT, player2.color)
 
 
 def redraw_window():
@@ -107,5 +109,8 @@ def run_game():
         if not player2.is_alive():
             print("Player 1 won!!!")
             run = False
+        a=random()
+        if(a<BOOSTERS_PER_SECOND/FPS):
+            board.spawn_booster(player1,player2)
 
 
