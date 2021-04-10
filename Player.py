@@ -3,14 +3,16 @@ from bullets import Bullet
 
 INITIAL_SHOOT_DAMAGE = 10
 
-
 class Player:
 
     def __init__(self, HP: int, initial_position, board, block_size, no, color):
         self.no = no  # numer gracza (1 lub 2)
+        self.maxHP = HP
         self.HP = HP
         self.movementSpeed = 1
+        self.movementBoost = 0
         self.shootingSpeed = 1
+        self.shootingSpeedBoost = 0
         self.orientation = (0, 1)  # orientacja, w która stronę jest zwrócony (zależna od ostatniego ruchu)
         self.position_x = initial_position[0]
         self.position_y = initial_position[1]
@@ -77,11 +79,41 @@ class Player:
         upper_right_object_type = self.board.check_position(new_position_x, lower_right_y)
         lower_left_object_type = self.board.check_position(lower_right_x, new_position_y)
 
-        if upper_left_object_type == "field" and lower_right_object_type == "field" \
-                and upper_right_object_type == "field" and lower_left_object_type == "field":
+        if upper_left_object_type != "wall" and lower_right_object_type != "wall" \
+                and upper_right_object_type != "wall" and lower_left_object_type != "wall":
             return True
 
         return False
+    def use_booster(self, booster):
+        if booster.type.get_name() == "healing":
+            self.HP+=booster.type.get_extraHP(self.maxHP,self.HP)
+        elif booster.type.get_name() == "newShoes":
+            self.movementSpeed+=0.5
+            self.movementBoost=booster.type.get_time()
+        #elif booster.type.get_name() == "rapidFire":
+
+        elif booster.type.get_name() == "fasterBullets":
+            self.shootingSpeed+=0.5
+            self.shootingSpeedBoost=booster.type.get_time()
+        elif booster.type.get_name() == "extraDamage":
+            self.shoot_damage*=1,5
+    def collect_booster(self, new_position_x, new_position_y):
+        lower_right_x = new_position_x + self.block_size
+        lower_right_y = new_position_y + self.block_size
+
+        upper_left_object_type = self.board.check_position(new_position_x, new_position_y)
+        lower_right_object_type = self.board.check_position(lower_right_x, lower_right_y)
+        upper_right_object_type = self.board.check_position(new_position_x, lower_right_y)
+        lower_left_object_type = self.board.check_position(lower_right_x, new_position_y)
+
+        if upper_left_object_type == "booster":
+            self.use_booster(self.board.get_booster(new_position_x, new_position_y))
+        elif lower_right_object_type == "booster":
+            self.use_booster(self.board.get_booster(lower_right_x, lower_right_y))
+        elif upper_right_object_type == "booster":
+            self.use_booster(self.board.get_booster(new_position_x, lower_right_y))
+        elif lower_left_object_type == "booster":
+            self.use_booster(self.board.get_booster(lower_right_x, new_position_y))
 
     def move(self, change_x, change_y, other_player):
         # TODO sprawdzać czy nie zebrał boosta
@@ -89,7 +121,6 @@ class Player:
 
         new_position_x = self.position_x + change_x * self.movementSpeed
         new_position_y = self.position_y + change_y * self.movementSpeed
-
         # sprawdzam czy nie wchodzi w drugiego gracza
         if self.check_collision(new_position_x, new_position_y, other_player):
             return
@@ -99,6 +130,8 @@ class Player:
 
         if not self.check_wall(new_position_x, new_position_y):
             return
+
+        self.collect_booster(new_position_x,new_position_y)
 
         self.position_x = new_position_x
         self.position_y = new_position_y
