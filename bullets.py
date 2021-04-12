@@ -1,7 +1,6 @@
 import pygame
 
 
-
 class Bullet:
     def __init__(self, x, y, movement_speed, color, player, orientation, range):
         # pozycja początkowa pocisku to niech będzie może środek gracza (z tej strony w którą jest skierowany)
@@ -21,12 +20,11 @@ class Bullet:
         pygame.draw.rect(window, self.color, (self.position_x, self.position_y, self.size_x, self.size_y))
 
     def move(self):
-        new_position_x = self.position_x + self.orientation[0]*self.movement_speed
-        new_position_y = self.position_y + self.orientation[1]*self.movement_speed
+        new_position_x = self.position_x + self.orientation.value[0]*self.movement_speed
+        new_position_y = self.position_y + self.orientation.value[1]*self.movement_speed
         self.position_x = new_position_x
         self.position_y = new_position_y
-        self.distance = self.distance + abs(self.orientation[0]*self.movement_speed + self.orientation[1]*self.movement_speed)
-
+        self.distance = self.distance + abs(self.orientation.value[0]*self.movement_speed + self.orientation.value[1]*self.movement_speed)
 
 
 class ActiveBullets:

@@ -2,12 +2,7 @@ from Field import Field
 from Wall import Wall
 from boosters import Boosters
 from random import randrange
-"""
-w Board będziemy mieć wszystkie obiekty z mapy i na każdym z nich podczas przerysowywania mapy będę wywoływać draw()
-w aktualnej wersji Board jest 20x20, a okno aplikacji 1000x1000, każdy obiekt na mapie ma 50x50
-proponuję, żeby w Board trzymać wszystkie obiekty poza Player, bo jemu wtedy możemy pozwolić na większy zakres ruchów -
-może się przesuwać co 1 piksel; reszta obiektów może leżeć w tych kwadracikach wyznaczanych przez Board
-"""
+
 
 class Board:
     def __init__(self, width: int, height: int, map_version: int, block_size: int):
@@ -15,7 +10,7 @@ class Board:
         self.width = width
         self.board = []
         self.block_size = block_size
-#        TODO: wygenerowanie najlepiej paru plansz, w sensie wstawienie scian
+
         if map_version == 1:
             for i in range(width):
                 self.board.append([])
@@ -41,11 +36,11 @@ class Board:
                         self.board[i].append(Wall(i * block_size, j*block_size, block_size))
                     else:
                         self.board[i].append(Field(i*block_size, j*block_size, block_size))
+
     def draw(self, window):
         for i in range(self.width):
             for j in range(self.height):
                 self.board[i][j].draw(window)
-
 
     # zwraca informację o tym jaki obiekt znajduje się na danej pozycji
     # x i y są współrzędnymi lewego górnego wierzchołka postaci (w pikselach)
@@ -68,6 +63,7 @@ class Board:
         boost=self.board[board_x][board_y]
         self.board[board_x][board_y] = Field(board_x*self.block_size,board_y*self.block_size, self.block_size)
         return boost
+
 
 def is_far_enough(block_size, x, y, player1, player2):
     d=block_size*3

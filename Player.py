@@ -1,8 +1,10 @@
 import pygame
 from bullets import Bullet
 from weapons import Weapon
+from Directions import Direction
 
 INITIAL_SHOOT_DAMAGE = 10
+
 
 class Player:
 
@@ -14,7 +16,7 @@ class Player:
         self.movementBoost = 0
         self.shootingSpeed = 1
         self.shootingSpeedBoost = 0
-        self.orientation = (0, 1)  # orientacja, w która stronę jest zwrócony (zależna od ostatniego ruchu)
+        self.orientation = Direction.UP  # orientacja, w która stronę jest zwrócony (zależna od ostatniego ruchu)
         self.position_x = initial_position[0]
         self.position_y = initial_position[1]
         self.block_size = block_size
@@ -117,9 +119,11 @@ class Player:
         elif lower_left_object_type == "booster":
             self.use_booster(self.board.get_booster(lower_right_x, new_position_y))
 
-    def move(self, change_x, change_y, other_player):
-        self.update_orientation(change_x, change_y)
+    def move(self, direction, other_player):
+        change_x = direction.value[0]
+        change_y = direction.value[1]
 
+        self.update_orientation(direction)
 
         new_position_x = self.position_x + change_x * self.movementSpeed
         new_position_y = self.position_y + change_y * self.movementSpeed
@@ -138,7 +142,8 @@ class Player:
         self.position_y = new_position_y
 
     def shoot(self, active_bullets):
-        # TODO sprawdzić czy ma amunicję
+        if self.current_weapon.ammunition <=0:
+            return
         x = int(self.position_x + self.block_size / 2)
         y = int(self.position_y + self.block_size / 2)
         speed = self.shootingSpeed*self.current_weapon.speed
@@ -146,8 +151,8 @@ class Player:
         active_bullets.add_bullet(bullet)
         self.current_weapon.use_ammunition()
 
-    def update_orientation(self, x, y):
-        self.orientation = (x, y)
+    def update_orientation(self, direction):
+        self.orientation = direction
 
     def draw(self, window):
         pygame.draw.rect(window, self.color, (self.position_x, self.position_y, self.block_size, self.block_size))

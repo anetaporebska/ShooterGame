@@ -11,6 +11,6 @@ class Wall:
     def draw(self, window):
         pygame.draw.rect(window, self.color, (self.position_x, self.position_y, self.block_size, self.block_size))
 
-    def get_type(self):
+    @staticmethod
+    def get_type():
         return "wall"
-
