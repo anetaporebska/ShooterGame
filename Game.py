@@ -21,14 +21,14 @@ BLOCK_SIZE = 50
 BOARD_WIDTH = int(WIDTH/BLOCK_SIZE)
 BOARD_HEIGHT = int(HEIGHT/BLOCK_SIZE)
 
-WINDOW = pygame.display.set_mode((WIDTH, HEIGHT+40 ))    # +20 wysokości na paski życia +20 na amunicję
+WINDOW = pygame.display.set_mode((WIDTH, HEIGHT+40))    # +20 wysokości na paski życia +20 na amunicję
 pygame.display.set_caption("Shooter Game")
 
 FPS = 100
 
 MAP_VERSION = 1
 
-board = Board(BOARD_WIDTH, BOARD_HEIGHT,MAP_VERSION, BLOCK_SIZE)
+board = Board(BOARD_WIDTH, BOARD_HEIGHT, MAP_VERSION, BLOCK_SIZE)
 
 player1 = Player(INITIAL_HP, INITIAL_POSITION_1, board, BLOCK_SIZE,1, (255, 0, 0))
 player2 = Player(INITIAL_HP, INITIAL_POSITION_2, board, BLOCK_SIZE,2, (0, 255, 0))
@@ -140,8 +140,8 @@ def run_game():
         if not player2.is_alive():
             print("Player 1 won!!!")
             run = False
-        a=random()
+        a = random()
         if a < BOOSTERS_PER_SECOND / FPS:
-            board.spawn_booster(player1,player2)
+            board.spawn_booster(player1, player2)
 
 

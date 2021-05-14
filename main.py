@@ -1,3 +1,4 @@
-from Game import run_game
+from QBot.AI_game import run_AI_game
 
-run_game()
+run_AI_game()
+#run_train_AI()

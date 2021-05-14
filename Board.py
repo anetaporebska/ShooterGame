@@ -24,7 +24,7 @@ class Board:
             for i in range(width):
                 self.board.append([])
                 for j in range(height):
-                    if i==0 or j==0 or j==height-1 or i==width-1 or (i==(width-width%2)/2 and j==(height-height%2)/2):
+                    if i==0 or j==0 or j==height-1 or i==width-1:
                         self.board[i].append(Wall(i * block_size, j*block_size, block_size))
                     else:
                         self.board[i].append(Field(i*block_size, j*block_size, block_size))
