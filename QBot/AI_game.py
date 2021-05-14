@@ -139,6 +139,7 @@ def run_AI_game():
     player1 = Player(INITIAL_HP, INITIAL_POSITION_1, board, BLOCK_SIZE, 1, (255, 0, 0))
     player2 = AI_bot(INITIAL_HP, INITIAL_POSITION_2, board, BLOCK_SIZE, 2, (0, 255, 0), player1, active_bullets, q_table)
     q_table = player2.q_table
+    player2.set_epsilon(0.1)
     run_game()
     player1 = Player(INITIAL_HP, INITIAL_POSITION_1, board, BLOCK_SIZE, 1, (255, 0, 0))
     player2 = AI_bot(INITIAL_HP, INITIAL_POSITION_2, board, BLOCK_SIZE, 2, (0, 255, 0), player1, active_bullets, q_table)

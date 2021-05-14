@@ -68,7 +68,7 @@ def redraw_window():
     pygame.display.update()
 
 
-HM_EPISODES = 2000
+HM_EPISODES = 1000
 
 
 def point_inside(x, y, point_x, point_y):
@@ -121,7 +121,7 @@ def train_AI(ep):
     global player2_shoot_time, player1_shoot_time, active_bullets
     active_bullets = ActiveBullets()
 
-    for i in range(1000): # ruchów do zakończenia rundy
+    for i in range(2000): # ruchów do zakończenia rundy
         player2.run()
         random_moves()
         t = pygame.time.get_ticks()
@@ -140,7 +140,7 @@ def run_train_AI():
     player2_shoot_time = pygame.time.get_ticks()
     player1_shoot_time = pygame.time.get_ticks()
     for i in range(HM_EPISODES):
-        print("Episode: ", i+1)
+        print("Episode: ", i+1, )
         train_AI(i)
         player2.update_epsilon()
     with open("q_table.pickle", "wb") as f:

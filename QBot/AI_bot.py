@@ -3,6 +3,7 @@ będzie miał 1 rodzaj broni
 """
 from Player import Player
 from Directions import Direction
+from weapons import Weapon
 import numpy as np
 
 UP = Direction.UP
@@ -12,7 +13,7 @@ RIGHT = Direction.RIGHT
 
 #BOOSTER_REWARD = 10  # jeśli zbierze booseter
 #SHOOT_REWARD = 20    # jeśli trafi
-DAMAGE_REWARD = -20  # jeśli zostanie trafiony
+DAMAGE_REWARD = -70  # jeśli zostanie trafiony
 MOVE_REWARD = 5      # jeśli zbliży się do przeciwnika, -5 w przeciwnym przypadku
 WIN_REWARD = 100     # jeśli wygra rundę, -100 wpp
 
@@ -29,15 +30,13 @@ HEIGHT = 12
 # - różnicę po y jego i najbliższego pocisku
 
 
-epsilon = 0.5
-EPS_DECAY = 0.98
+epsilon = 0.7
+EPS_DECAY = 0.998
 
 start_q_table = None
 
 LEARNING_RATE = 0.1
 DISCOUNT = 0.95
-
-# episode_rewards = []
 
 # q_table : pierwsza para współrzędnych różnica po x i y do przeciwnika, druga do najbliższego pocisku
 
@@ -49,6 +48,7 @@ def euclid_dist(dist1, dist2):
 class AI_bot(Player):
     def __init__(self, HP, initial_position, board, block_size, no, color, enemy, active_bullets, q_table = None):
         super().__init__(HP, initial_position, board, block_size, no, color)
+        self.weapons = [Weapon(800, 1, 1, 200, (255, 0, 152))]
         self.enemy = enemy
         self.active_bullets = active_bullets
         self.q_table = q_table
@@ -91,7 +91,7 @@ class AI_bot(Player):
         if self.orientation == LEFT:
             if enemy_x < x and y < enemy_y < y + self.block_size:
                 return True
-        if self.orientation == UP:
+        if self.orientation == RIGHT:
             if enemy_x > x and y < enemy_y < y + self.block_size:
                 return True
         return False
@@ -145,3 +145,8 @@ class AI_bot(Player):
     def update_epsilon(self):
         global epsilon
         epsilon *= EPS_DECAY
+        print("Epsilon: ", epsilon)
+
+    def set_epsilon(self, eps):
+        global epsilon
+        epsilon = eps

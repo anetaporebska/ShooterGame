@@ -14,7 +14,7 @@ class Player:
         self.HP = HP
         self.movementSpeed = 1
         self.movementBoost = 0
-        self.shootingSpeed = 1
+        self.shootingSpeed = 1.5
         self.shootingSpeedBoost = 0
         self.orientation = Direction.UP  # orientacja, w która stronę jest zwrócony (zależna od ostatniego ruchu)
         self.position_x = initial_position[0]
