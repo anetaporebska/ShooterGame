@@ -5,7 +5,7 @@ from bullets import ActiveBullets
 from health_bar import HealthBar
 from random import random
 from Directions import Direction
-
+from background import Background
 
 INITIAL_HP = 100
 BOOSTERS_PER_SECOND = 0.1 #Statystycznie
@@ -20,6 +20,8 @@ BLOCK_SIZE = 50
 
 BOARD_WIDTH = int(WIDTH/BLOCK_SIZE)
 BOARD_HEIGHT = int(HEIGHT/BLOCK_SIZE)
+
+#bg = Background("images/background.png", [0, 0], WIDTH, HEIGHT)
 
 WINDOW = pygame.display.set_mode((WIDTH, HEIGHT+40))    # +20 wysokości na paski życia +20 na amunicję
 pygame.display.set_caption("Shooter Game")
@@ -57,6 +59,9 @@ player2_switch_time = None
 
 
 def redraw_window():
+
+    #WINDOW.blit(bg.image, bg.rect)
+    WINDOW.fill((0,0,0))
     board.draw(WINDOW)
     active_bullets.move(board, player1, player2)
     active_bullets.draw(WINDOW)
