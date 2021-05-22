@@ -1,7 +1,8 @@
-from QBot.AI_game import run_AI_game
-from QBot.train_AI import run_train_AI
+# from QBot.AI_game import run_AI_game
+#from QBot.train_AI import run_train_AI
 from Game import run_game
 
 #run_AI_game()
+
 #run_train_AI()
 run_game()

@@ -26,6 +26,18 @@ class Player:
         self.weapons = [Weapon(200, 1, 1, 100, (255, 0, 152)), Weapon(100, 2, 2, 10, (255, 0, 82)), Weapon(500, 1, 2, 20, (152, 0, 82))]   #TODO dobrać sensowne parametry
         self.weapon_idx = 0
         self.current_weapon = self.weapons[self.weapon_idx]
+        if self.no == 1:
+            self.image = "images/player1.png"
+        else:
+            self.image = "images/player2.png"
+        self.image = pygame.image.load(self.image).convert()
+        self.image_LEFT = pygame.transform.flip(self.image, True, False)
+        self.image_RIGHT = self.image
+
+        self.image_UP = pygame.transform.rotate(self.image, 90)
+        self.image_DOWN = pygame.transform.rotate(self.image, 270)
+
+
 
     def take_damage(self, damage):
         self.HP -= damage
@@ -153,9 +165,18 @@ class Player:
 
     def update_orientation(self, direction):
         self.orientation = direction
+        if self.orientation == Direction.UP:
+            self.image = self.image_UP
+        if self.orientation == Direction.DOWN:
+            self.image = self.image_DOWN
+        if self.orientation == Direction.LEFT:
+            self.image = self.image_LEFT
+        if self.orientation == Direction.RIGHT:
+            self.image = self.image_RIGHT
+
 
     def draw(self, window):
-        pygame.draw.rect(window, self.color, (self.position_x, self.position_y, self.block_size, self.block_size))
+        window.blit(self.image, (self.position_x, self.position_y))
         if self.no == 1:
             x = 0
         else:
