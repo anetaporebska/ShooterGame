@@ -7,6 +7,15 @@ from health_bar import HealthBar
 from random import random
 from Directions import Direction
 from QBot.AI_bot import AI_bot
+from Bot1.Bot1 import Bot
+
+player1 = None
+player2 = None
+player1_health_bar = None
+player2_health_bar = None
+q_table = None
+board = None
+MAP_VERSION = None
 
 INITIAL_HP = 100
 BOOSTERS_PER_SECOND = 0.1 #Statystycznie
@@ -14,11 +23,10 @@ BOOSTERS_PER_SECOND = 0.1 #Statystycznie
 WIDTH = 1000
 HEIGHT = 600
 
-INITIAL_POSITION_1 = (51,51)
-INITIAL_POSITION_2 = (WIDTH-101,HEIGHT-101)
+INITIAL_POSITION_1 = (51, 51)
+INITIAL_POSITION_2 = (WIDTH-101, HEIGHT-101)
 
 BLOCK_SIZE = 50
-
 BOARD_WIDTH = int(WIDTH/BLOCK_SIZE)
 BOARD_HEIGHT = int(HEIGHT/BLOCK_SIZE)
 
@@ -26,25 +34,9 @@ WINDOW = pygame.display.set_mode((WIDTH, HEIGHT+40))    # +20 wysokości na pask
 pygame.display.set_caption("Shooter Game")
 
 FPS = 100
-
-MAP_VERSION = 2
-
-board = Board(BOARD_WIDTH, BOARD_HEIGHT, MAP_VERSION, BLOCK_SIZE)
-
 active_bullets = ActiveBullets()
-
-with open("QBot/q_table.pickle", "rb") as f:
-    q_table = pickle.load(f)
-
-player1 = Player(INITIAL_HP, INITIAL_POSITION_1, board, BLOCK_SIZE,1, (255, 0, 0))
-player2 = AI_bot(INITIAL_HP, INITIAL_POSITION_2, board, BLOCK_SIZE,2, (0, 255, 0), player1, active_bullets, q_table)
-q_table = player2.q_table
-
 SHOOT_COOLDOWN = 500
 SWITCH_COOLDOWN = 100
-
-player1_health_bar = HealthBar(INITIAL_HP, 50, HEIGHT, player1.color)
-player2_health_bar = HealthBar(INITIAL_HP, WIDTH-150, HEIGHT, player2.color)
 
 
 DOWN = Direction.DOWN
@@ -59,7 +51,26 @@ player2_shoot_time = None
 player1_switch_time = None
 
 
+def initialize_game(bot):
+    global player1, player2, player1_health_bar, player2_health_bar, q_table, board
+
+    board = Board(BOARD_WIDTH, BOARD_HEIGHT, MAP_VERSION, BLOCK_SIZE)
+    player1 = Player(INITIAL_HP, INITIAL_POSITION_1, board, BLOCK_SIZE, 1, (255, 175, 0))
+
+    if bot == AI_bot:
+        with open("QBot/q_table.pickle", "rb") as f:
+            q_table = pickle.load(f)
+        player2 = bot(INITIAL_HP, INITIAL_POSITION_2, board, BLOCK_SIZE, 2, (54, 52, 255), player1, active_bullets)
+        q_table = player2.q_table
+    else:
+        player2 = bot(INITIAL_HP, INITIAL_POSITION_2, board, BLOCK_SIZE, 2, (54, 52, 255), player1, active_bullets)
+
+    player1_health_bar = HealthBar(INITIAL_HP, 50, HEIGHT, player1.color)
+    player2_health_bar = HealthBar(INITIAL_HP, WIDTH - 150, HEIGHT, player2.color)
+
+
 def redraw_window():
+    WINDOW.fill((0, 0, 0))
     board.draw(WINDOW)
     active_bullets.move(board, player1, player2)
     active_bullets.draw(WINDOW)
@@ -134,15 +145,15 @@ def run_game():
             board.spawn_booster(player1, player2)
 
 
-def run_AI_game():
-    global player1, player2, q_table
-    player1 = Player(INITIAL_HP, INITIAL_POSITION_1, board, BLOCK_SIZE, 1, (255, 0, 0))
-    player2 = AI_bot(INITIAL_HP, INITIAL_POSITION_2, board, BLOCK_SIZE, 2, (0, 255, 0), player1, active_bullets, q_table)
-    q_table = player2.q_table
-    player2.set_epsilon(0.1)
+def run_AI_game(bot=AI_bot, map=1):
+    global player1, player2, q_table, MAP_VERSION
+    MAP_VERSION = map
+    initialize_game(bot)
+    if bot == AI_bot:
+        q_table = player2.q_table
+        player2.set_epsilon(0.1)
     run_game()
-    player1 = Player(INITIAL_HP, INITIAL_POSITION_1, board, BLOCK_SIZE, 1, (255, 0, 0))
-    player2 = AI_bot(INITIAL_HP, INITIAL_POSITION_2, board, BLOCK_SIZE, 2, (0, 255, 0), player1, active_bullets, q_table)
-    player2.update_epsilon()
-    with open("QBot/q_table.pickle", "wb") as f:
-        pickle.dump(q_table, f)
+
+    if bot == AI_bot:
+        with open("QBot/q_table.pickle", "wb") as f:
+            pickle.dump(q_table, f)

@@ -112,7 +112,7 @@ def initialize_players():
         x = np.random.randint(51, 899)
         y = np.random.randint(51, 499)
 
-    player1 = Player(INITIAL_HP, (x,y), board, BLOCK_SIZE, 1, (255, 0, 0))
+    player1 = Player(INITIAL_HP, (x, y), board, BLOCK_SIZE, 1, (255, 0, 0))
     player2 = AI_bot(INITIAL_HP, (ai_x, ai_y), board, BLOCK_SIZE, 2, (0, 255, 0), player1, active_bullets, q_table)
 
 
@@ -143,7 +143,7 @@ def run_train_AI():
         print("Episode: ", i+1, )
         train_AI(i)
         player2.update_epsilon()
-    with open("q_table.pickle", "wb") as f:
+    with open("QBot/q_table.pickle", "wb") as f:
         pickle.dump(q_tabl, f)
 
 

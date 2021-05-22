@@ -61,8 +61,8 @@ class AI_bot(Player):
                             self.q_table[((i, ii), (iii, iiii))] = [np.random.uniform(-5, 0) for i in range(5)]
 
     def dist(self, other):
-        return (self.position_x - other.position_x)//(WIDTH*self.block_size), \
-               (self.position_y - other.position_y)//(HEIGHT*self.block_size)
+        return (self.position_x - other.position_x)//(self.block_size), \
+               (self.position_y - other.position_y)//(self.block_size)
 
     def action(self, choice):
         if choice == 0:
@@ -97,7 +97,7 @@ class AI_bot(Player):
         return False
 
     def get_observation(self):
-        min_dist = 100
+        min_dist = 10000
         min_bullet = None
 
         for bullet in self.active_bullets.bullets:
@@ -120,6 +120,7 @@ class AI_bot(Player):
         reward = 0
 
         obs = self.get_observation()
+       # print(obs)
         if np.random.random() > epsilon:
             choice = np.argmax(self.q_table[obs])
         else:
