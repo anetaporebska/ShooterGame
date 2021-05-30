@@ -5,6 +5,7 @@ from game.engine.bullets import ActiveBullets
 from game.engine.health_bar import HealthBar
 from random import random
 from game.environment.Directions import Direction
+from game.gui.finishWindow import end_game
 
 # player1 - AWSD + Space + left shift
 # player2 - arrows + Enter + right shift
@@ -133,11 +134,13 @@ def run_game():
             manage_keys_pressed()
 
             if not player1.is_alive():
-                print("Player 2 won!!!")
+                pygame.quit()
+                end_game("Player 2 won!", player2.color)
                 run = False
 
             if not player2.is_alive():
-                print("Player 1 won!!!")
+                pygame.quit()
+                end_game("Player 1 won!", player1.color)
                 run = False
             a = random()
             if a < BOOSTERS_PER_SECOND / FPS:

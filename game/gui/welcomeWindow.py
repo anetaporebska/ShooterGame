@@ -5,7 +5,7 @@ from Bots.bot_game import run_AI_game
 from Bots.Bot1 import Bot
 
 
-def main_menu():
+def run_main_menu():
     clock = pygame.time.Clock()
     pygame.init()
     pygame.display.set_caption("Shooter game")
@@ -39,22 +39,26 @@ def main_menu():
 
         if two_player_game.collidepoint((mouse_x, mouse_y)) and click:
             run = False
+            pygame.quit()
             run_game()
 
         if simple_bot_game.collidepoint((mouse_x, mouse_y)) and click:
             run = False
+            pygame.quit()
             run_AI_game(Bot)
 
         if AI_bot_game.collidepoint((mouse_x, mouse_y)) and click:
             run = False
+            pygame.quit()
             run_AI_game()
 
-        for event in pygame.event.get():
-            if event.type == QUIT:
-                pygame.quit()
-                return 0
-            if event.type == MOUSEBUTTONDOWN:
-                if event.button == 1:
-                    click = True
+        if run:
+            for event in pygame.event.get():
+                if event.type == QUIT:
+                    pygame.quit()
+                    return 0
+                if event.type == MOUSEBUTTONDOWN:
+                    if event.button == 1:
+                        click = True
         pygame.display.update()
         clock.tick(60)

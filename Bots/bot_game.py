@@ -7,6 +7,7 @@ from game.engine.health_bar import HealthBar
 from random import random
 from game.environment.Directions import Direction
 from Bots.AI_bot import AI_bot
+from game.gui.finishWindow import end_game
 
 
 def run_AI_game(bot=AI_bot, map=1):
@@ -130,11 +131,13 @@ def run_AI_game(bot=AI_bot, map=1):
             player2.run()
 
             if not player1.is_alive():
-                print("Player 2 won!!!")
+                pygame.quit()
+                end_game("Player 2 won!", player2.color)
                 run = False
 
             if not player2.is_alive():
-                print("Player 1 won!!!")
+                pygame.quit()
+                end_game("Player 1 won!", player1.color)
                 run = False
             a = random()
             if a < BOOSTERS_PER_SECOND / FPS:
