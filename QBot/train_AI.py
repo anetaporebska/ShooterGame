@@ -1,10 +1,10 @@
 import pickle
 import pygame
-from Player import Player
-from Board import Board
-from bullets import ActiveBullets
-from health_bar import HealthBar
-from Directions import Direction
+from game.engine.Player import Player
+from game.environment.Board import Board
+from game.engine.bullets import ActiveBullets
+from game.engine.health_bar import HealthBar
+from game.environment.Directions import Direction
 from QBot.AI_bot import AI_bot
 import numpy as np
 
