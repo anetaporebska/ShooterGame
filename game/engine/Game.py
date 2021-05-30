@@ -118,6 +118,8 @@ def run_game():
     run = True
 
     clock = pygame.time.Clock()
+    global WINDOW
+    WINDOW = pygame.display.set_mode((WIDTH, HEIGHT + 40)) # TODO
 
     global player1_shoot_time, player2_shoot_time, player1_switch_time, player2_switch_time
 

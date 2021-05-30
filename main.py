@@ -1,7 +1,3 @@
-from Bot1.Bot1 import Bot
-from QBot.AI_game import run_AI_game
+from game.gui.welcomeWindow import main_menu
 
-run_AI_game(Bot)
-
-#run_train_AI()
-#run_game()
+main_menu()
