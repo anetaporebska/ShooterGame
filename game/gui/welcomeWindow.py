@@ -24,9 +24,9 @@ def main_menu():
         simple_bot_game = pygame.Rect(150, 200, 200, 50)
         AI_bot_game = pygame.Rect(150, 300, 200, 50)
 
-        pygame.draw.rect(window, (69, 69, 69), two_player_game)
-        pygame.draw.rect(window, (69, 69, 69), simple_bot_game)
-        pygame.draw.rect(window, (69, 69, 69), AI_bot_game)
+        pygame.draw.rect(window, (70, 70, 70), two_player_game)
+        pygame.draw.rect(window, (70, 70, 70), simple_bot_game)
+        pygame.draw.rect(window, (70, 70, 70), AI_bot_game)
 
         two_player_text = font.render("Two players game", True, (255, 255, 255))
         window.blit(two_player_text, (175, 115))
