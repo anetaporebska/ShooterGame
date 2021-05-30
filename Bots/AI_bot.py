@@ -1,6 +1,3 @@
-"""
-będzie miał 1 rodzaj broni
-"""
 from game.engine.Player import Player
 from game.environment.Directions import Direction
 from game.engine.weapons import Weapon
@@ -11,8 +8,7 @@ DOWN = Direction.DOWN
 LEFT = Direction.LEFT
 RIGHT = Direction.RIGHT
 
-#BOOSTER_REWARD = 10  # jeśli zbierze booseter
-#SHOOT_REWARD = 20    # jeśli trafi
+
 DAMAGE_REWARD = -70  # jeśli zostanie trafiony
 MOVE_REWARD = 5      # jeśli zbliży się do przeciwnika, -5 w przeciwnym przypadku
 WIN_REWARD = 100     # jeśli wygra rundę, -100 wpp
@@ -20,23 +16,13 @@ WIN_REWARD = 100     # jeśli wygra rundę, -100 wpp
 WIDTH = 20
 HEIGHT = 12
 
-# 5 akcji które może podjąć: UP, DOWN, LEFT, RIGHT, None
-# strzelał będzie jeśli przeciwnik będzie na przeciwko i w zasięgu
-
 # co "widzi" bot:
 # - różnicę po x jego i przeciwnika
 # - różnicę po y jego i przeciwnika
 # - różnicę po x jego i najbliższego pocisku
 # - różnicę po y jego i najbliższego pocisku
 
-
-epsilon = 0.7
-EPS_DECAY = 0.998
-
 start_q_table = None
-
-LEARNING_RATE = 0.1
-DISCOUNT = 0.95
 
 # q_table : pierwsza para współrzędnych różnica po x i y do przeciwnika, druga do najbliższego pocisku
 
@@ -46,12 +32,16 @@ def euclid_dist(dist1, dist2):
 
 
 class AI_bot(Player):
-    def __init__(self, HP, initial_position, board, block_size, no, color, enemy, active_bullets, q_table = None):
+    def __init__(self, HP, initial_position, board, block_size, no, color, enemy, active_bullets, q_table=None):
         super().__init__(HP, initial_position, board, block_size, no, color)
         self.weapons = [Weapon(800, 1, 1, 200, (255, 0, 152))]
         self.enemy = enemy
         self.active_bullets = active_bullets
         self.q_table = q_table
+        self.epsilon = 0.7
+        self.eps_decay = 0.998
+        self.learning_rate = 0.1
+        self.discount = 0.95
         if self.q_table is None:
             self.q_table = {}
             for i in range(-WIDTH, WIDTH+1):
@@ -61,8 +51,8 @@ class AI_bot(Player):
                             self.q_table[((i, ii), (iii, iiii))] = [np.random.uniform(-5, 0) for i in range(5)]
 
     def dist(self, other):
-        return (self.position_x - other.position_x)//(self.block_size), \
-               (self.position_y - other.position_y)//(self.block_size)
+        return (self.position_x - other.position_x)//self.block_size, \
+               (self.position_y - other.position_y)//self.block_size
 
     def action(self, choice):
         if choice == 0:
@@ -120,8 +110,7 @@ class AI_bot(Player):
         reward = 0
 
         obs = self.get_observation()
-       # print(obs)
-        if np.random.random() > epsilon:
+        if np.random.random() > self.epsilon:
             choice = np.argmax(self.q_table[obs])
         else:
             choice = np.random.randint(0, 5)
@@ -140,14 +129,11 @@ class AI_bot(Player):
         current_q = self.q_table[obs][choice]
         new_obs = self.get_observation()
         max_future_q = np.max(self.q_table[new_obs])
-        new_q = (1 - LEARNING_RATE) * current_q + LEARNING_RATE * (reward + DISCOUNT * max_future_q )
+        new_q = (1 - self.learning_rate) * current_q + self.learning_rate * (reward + self.discount * max_future_q )
         self.q_table[obs][choice] = new_q
 
     def update_epsilon(self):
-        global epsilon
-        epsilon *= EPS_DECAY
-        print("Epsilon: ", epsilon)
+        self.epsilon += self.eps_decay
 
     def set_epsilon(self, eps):
-        global epsilon
-        epsilon = eps
+        self.epsilon = eps

@@ -5,7 +5,7 @@ from game.environment.Board import Board
 from game.engine.bullets import ActiveBullets
 from game.engine.health_bar import HealthBar
 from game.environment.Directions import Direction
-from QBot.AI_bot import AI_bot
+from Bots.AI_bot import AI_bot
 import numpy as np
 
 INITIAL_HP = 100
@@ -143,7 +143,7 @@ def run_train_AI():
         print("Episode: ", i+1, )
         train_AI(i)
         player2.update_epsilon()
-    with open("QBot/q_table.pickle", "wb") as f:
+    with open("Bots/q_table.pickle", "wb") as f:
         pickle.dump(q_tabl, f)
 
 

@@ -1,8 +1,8 @@
 import pygame
 from pygame.locals import *
 from game.engine.Game import run_game
-from QBot.AI_game import run_AI_game
-from Bot1.Bot1 import Bot
+from Bots.bot_game import run_AI_game
+from Bots.Bot1 import Bot
 
 
 def main_menu():
@@ -35,7 +35,7 @@ def main_menu():
         window.blit(two_player_text, (175, 215))
 
         two_player_text = font.render("AI bot game", True, (255, 255, 255))
-        window.blit(two_player_text, (175, 315))
+        window.blit(two_player_text, (195, 315))
 
         if two_player_game.collidepoint((mouse_x, mouse_y)) and click:
             run = False
