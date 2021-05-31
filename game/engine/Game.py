@@ -130,6 +130,7 @@ def run_game():
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     run = False
+                    exit(1)
 
             manage_keys_pressed()
 

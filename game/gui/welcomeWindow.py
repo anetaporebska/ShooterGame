@@ -61,4 +61,4 @@ def run_main_menu():
                     if event.button == 1:
                         click = True
         pygame.display.update()
-        clock.tick(60)
+        clock.tick(50)

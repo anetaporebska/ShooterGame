@@ -9,7 +9,7 @@ LEFT = Direction.LEFT
 RIGHT = Direction.RIGHT
 
 
-DAMAGE_REWARD = -70  # jeśli zostanie trafiony
+DAMAGE_REWARD = -7000  # jeśli zostanie trafiony
 MOVE_REWARD = 5      # jeśli zbliży się do przeciwnika, -5 w przeciwnym przypadku
 WIN_REWARD = 100     # jeśli wygra rundę, -100 wpp
 

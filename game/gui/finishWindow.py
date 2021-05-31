@@ -45,7 +45,7 @@ def end_game(text, col):
         for event in pygame.event.get():
             if event.type == QUIT:
                 pygame.quit()
-                return 0
+                exit(1)
             if event.type == MOUSEBUTTONDOWN:
                 if event.button == 1:
                     click = True

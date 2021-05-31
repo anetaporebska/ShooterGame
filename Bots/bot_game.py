@@ -17,7 +17,6 @@ def run_AI_game(bot=AI_bot, map=1):
     player2_health_bar = None
     q_table = None
     board = None
-    MAP_VERSION = None
 
     INITIAL_HP = 100
     BOOSTERS_PER_SECOND = 0.1  # Statystycznie
