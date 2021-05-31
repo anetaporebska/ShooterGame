@@ -40,7 +40,7 @@ def end_game(text, col):
 
         if quit_button.collidepoint((mouse_x, mouse_y)) and click:
             pygame.quit()
-            return 0
+            exit(0)
 
         for event in pygame.event.get():
             if event.type == QUIT:
