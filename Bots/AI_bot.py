@@ -8,27 +8,18 @@ DOWN = Direction.DOWN
 LEFT = Direction.LEFT
 RIGHT = Direction.RIGHT
 
-
-DAMAGE_REWARD = -7000  # jeśli zostanie trafiony
-MOVE_REWARD = 5      # jeśli zbliży się do przeciwnika, -5 w przeciwnym przypadku
-WIN_REWARD = 100     # jeśli wygra rundę, -100 wpp
+DAMAGE_REWARD = -70
+MOVE_REWARD = 5
+WIN_REWARD = 100
 
 WIDTH = 20
 HEIGHT = 12
 
-# co "widzi" bot:
-# - różnicę po x jego i przeciwnika
-# - różnicę po y jego i przeciwnika
-# - różnicę po x jego i najbliższego pocisku
-# - różnicę po y jego i najbliższego pocisku
-
 start_q_table = None
-
-# q_table : pierwsza para współrzędnych różnica po x i y do przeciwnika, druga do najbliższego pocisku
 
 
 def euclid_dist(dist1, dist2):
-    return np.sqrt((dist1[0]-dist2[0])**2 + (dist1[1]-dist2[1])**2)
+    return np.sqrt((dist1[0] - dist2[0]) ** 2 + (dist1[1] - dist2[1]) ** 2)
 
 
 class AI_bot(Player):
@@ -44,15 +35,15 @@ class AI_bot(Player):
         self.discount = 0.95
         if self.q_table is None:
             self.q_table = {}
-            for i in range(-WIDTH, WIDTH+1):
-                for ii in range(-HEIGHT, HEIGHT+1):
-                    for iii in range(-WIDTH, WIDTH+1):
-                        for iiii in range(-HEIGHT, HEIGHT+1):
+            for i in range(-WIDTH, WIDTH + 1):
+                for ii in range(-HEIGHT, HEIGHT + 1):
+                    for iii in range(-WIDTH, WIDTH + 1):
+                        for iiii in range(-HEIGHT, HEIGHT + 1):
                             self.q_table[((i, ii), (iii, iiii))] = [np.random.uniform(-5, 0) for i in range(5)]
 
     def dist(self, other):
-        return (self.position_x - other.position_x)//self.block_size, \
-               (self.position_y - other.position_y)//self.block_size
+        return (self.position_x - other.position_x) // self.block_size, \
+               (self.position_y - other.position_y) // self.block_size
 
     def action(self, choice):
         if choice == 0:
@@ -67,11 +58,11 @@ class AI_bot(Player):
             pass
 
     def shoot_decision(self):
-        # jeśli przeciwnik na przeciwko to shoot()
+
         x = self.position_x
         y = self.position_y
-        enemy_x = int(self.enemy.position_x + self.block_size/2)
-        enemy_y = int(self.enemy.position_y + self.block_size/2)
+        enemy_x = int(self.enemy.position_x + self.block_size / 2)
+        enemy_y = int(self.enemy.position_y + self.block_size / 2)
         if self.orientation == UP:
             if enemy_y < y and x < enemy_x < x + self.block_size:
                 return True
@@ -99,7 +90,7 @@ class AI_bot(Player):
         enemy_dist = self.dist(self.enemy)
 
         if min_bullet is None:
-            return enemy_dist, (WIDTH-1, HEIGHT-1)
+            return enemy_dist, (WIDTH - 1, HEIGHT - 1)
         else:
             return enemy_dist, self.dist(min_bullet)
 
@@ -129,7 +120,7 @@ class AI_bot(Player):
         current_q = self.q_table[obs][choice]
         new_obs = self.get_observation()
         max_future_q = np.max(self.q_table[new_obs])
-        new_q = (1 - self.learning_rate) * current_q + self.learning_rate * (reward + self.discount * max_future_q )
+        new_q = (1 - self.learning_rate) * current_q + self.learning_rate * (reward + self.discount * max_future_q)
         self.q_table[obs][choice] = new_q
 
     def update_epsilon(self):

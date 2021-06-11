@@ -10,40 +10,36 @@ import numpy as np
 
 
 def run_train_AI():
-    INITIAL_HP = 100
+    initial_hp = 100
 
-    WIDTH = 1000
-    HEIGHT = 600
+    width = 1000
+    height = 600
 
-    INITIAL_POSITION_1 = (51, 51)
-    INITIAL_POSITION_2 = (WIDTH - 101, HEIGHT - 101)
+    initial_position_1 = (51, 51)
+    initial_position_2 = (width - 101, height - 101)
 
-    BLOCK_SIZE = 50
+    block_size = 50
 
-    BOARD_WIDTH = int(WIDTH / BLOCK_SIZE)
-    BOARD_HEIGHT = int(HEIGHT / BLOCK_SIZE)
+    board_width = int(width / block_size)
+    board_height = int(height / block_size)
 
-    WINDOW = pygame.display.set_mode((WIDTH, HEIGHT + 40))  # +20 wysokości na paski życia +20 na amunicję
+    window = pygame.display.set_mode((width, height + 40))  # +20 wysokości na paski życia +20 na amunicję
     pygame.display.set_caption("Shooter Game")
 
-    FPS = 100
+    map_version = 2
 
-    MAP_VERSION = 2
-
-    board = Board(BOARD_WIDTH, BOARD_HEIGHT, MAP_VERSION, BLOCK_SIZE)
+    board = Board(board_width, board_height, map_version, block_size)
 
     active_bullets = ActiveBullets()
 
-    clock = pygame.time.Clock()
-
-    player1 = Player(INITIAL_HP, INITIAL_POSITION_1, board, BLOCK_SIZE, 1, (255, 0, 0))
-    player2 = AI_bot(INITIAL_HP, INITIAL_POSITION_2, board, BLOCK_SIZE, 2, (0, 255, 0), player1, active_bullets)
+    player1 = Player(initial_hp, initial_position_1, board, block_size, 1, (255, 0, 0))
+    player2 = AI_bot(initial_hp, initial_position_2, board, block_size, 2, (0, 255, 0), player1, active_bullets)
     q_table = player2.q_table
 
-    SHOOT_COOLDOWN = 250
+    shoot_cooldown = 250
 
-    player1_health_bar = HealthBar(INITIAL_HP, 50, HEIGHT, player1.color)
-    player2_health_bar = HealthBar(INITIAL_HP, WIDTH - 150, HEIGHT, player2.color)
+    player1_health_bar = HealthBar(initial_hp, 50, height, player1.color)
+    player2_health_bar = HealthBar(initial_hp, width - 150, height, player2.color)
 
     DOWN = Direction.DOWN
     UP = Direction.UP
@@ -54,26 +50,25 @@ def run_train_AI():
 
     player1_shoot_time = None
     player2_shoot_time = None
-    player1_switch_time = None
 
-    HM_EPISODES = 1000
+    hm_episodes = 1000
 
     def redraw_window():
-        board.draw(WINDOW)
+        board.draw(window)
         active_bullets.move(board, player1, player2)
-        active_bullets.draw(WINDOW)
-        player1.draw(WINDOW)
-        player2.draw(WINDOW)
-        player1_health_bar.update(player1.HP, WINDOW)
-        player2_health_bar.update(player2.HP, WINDOW)
+        active_bullets.draw(window)
+        player1.draw(window)
+        player2.draw(window)
+        player1_health_bar.update(player1.HP, window)
+        player2_health_bar.update(player2.HP, window)
         pygame.display.update()
 
     def point_inside(x, y, point_x, point_y):
-        return x < point_x < x + BLOCK_SIZE and y < point_y < y + BLOCK_SIZE
+        return x < point_x < x + block_size and y < point_y < y + block_size
 
     def possible_position(x, y, obj_x, obj_y):
-        if point_inside(x, y, obj_x, obj_y) or point_inside(x + BLOCK_SIZE, y, obj_x, obj_y) \
-                or point_inside(x, y + BLOCK_SIZE, obj_x, obj_y) or point_inside(x + BLOCK_SIZE, y + BLOCK_SIZE, obj_x, obj_y):
+        if point_inside(x, y, obj_x, obj_y) or point_inside(x + block_size, y, obj_x, obj_y) \
+                or point_inside(x, y + block_size, obj_x, obj_y) or point_inside(x + block_size, y + block_size, obj_x, obj_y):
             return False
         return True
 
@@ -90,7 +85,7 @@ def run_train_AI():
             player1.move(RIGHT, player2)
 
         t = pygame.time.get_ticks()
-        if player1_shoot_time + SHOOT_COOLDOWN // 2 < t:
+        if player1_shoot_time + shoot_cooldown // 2 < t:
             player1.shoot(active_bullets)
             player1_shoot_time = t
 
@@ -107,19 +102,19 @@ def run_train_AI():
             x = np.random.randint(51, 899)
             y = np.random.randint(51, 499)
 
-        player1 = Player(INITIAL_HP, (x, y), board, BLOCK_SIZE, 1, (255, 0, 0))
-        player2 = AI_bot(INITIAL_HP, (ai_x, ai_y), board, BLOCK_SIZE, 2, (0, 255, 0), player1, active_bullets, q_table)
+        player1 = Player(initial_hp, (x, y), board, block_size, 1, (255, 0, 0))
+        player2 = AI_bot(initial_hp, (ai_x, ai_y), board, block_size, 2, (0, 255, 0), player1, active_bullets, q_table)
 
     def train_AI(ep):
         initialize_players()
         nonlocal player2_shoot_time, player1_shoot_time, active_bullets
         active_bullets = ActiveBullets()
 
-        for i in range(2000):  # ruchów do zakończenia rundy
+        for i in range(2000):
             player2.run()
             random_moves()
             t = pygame.time.get_ticks()
-            if player2_shoot_time + SHOOT_COOLDOWN < t and player2.shoot_decision():
+            if player2_shoot_time + shoot_cooldown < t and player2.shoot_decision():
                 player2.shoot(active_bullets)
                 player2_shoot_time = t
             if not player1.is_alive() or not player2.is_alive():
@@ -130,7 +125,7 @@ def run_train_AI():
     q_tabl = player2.q_table
     player2_shoot_time = pygame.time.get_ticks()
     player1_shoot_time = pygame.time.get_ticks()
-    for i in range(HM_EPISODES):
+    for i in range(hm_episodes):
         print("Episode: ", i + 1, )
         train_AI(i)
         player2.update_epsilon()

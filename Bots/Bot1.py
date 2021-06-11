@@ -13,7 +13,7 @@ HEIGHT = 12
 
 
 def euclid_dist(dist1, dist2):
-    return np.sqrt((dist1[0]-dist2[0])**2 + (dist1[1]-dist2[1])**2)
+    return np.sqrt((dist1[0] - dist2[0]) ** 2 + (dist1[1] - dist2[1]) ** 2)
 
 
 class Bot(Player):
@@ -24,8 +24,8 @@ class Bot(Player):
         self.active_bullets = active_bullets
 
     def dist(self, other):
-        return (self.position_x - other.position_x)//self.block_size, \
-               (self.position_y - other.position_y)//self.block_size
+        return (self.position_x - other.position_x) // self.block_size, \
+               (self.position_y - other.position_y) // self.block_size
 
     def action(self, choice):
         if choice == 0:
@@ -40,11 +40,10 @@ class Bot(Player):
             pass
 
     def shoot_decision(self):
-        # jeśli przeciwnik na przeciwko to shoot()
         x = self.position_x
         y = self.position_y
-        enemy_x = int(self.enemy.position_x + self.block_size/2)
-        enemy_y = int(self.enemy.position_y + self.block_size/2)
+        enemy_x = int(self.enemy.position_x + self.block_size / 2)
+        enemy_y = int(self.enemy.position_y + self.block_size / 2)
         if self.orientation == UP:
             if enemy_y < y and x < enemy_x < x + self.block_size:
                 return True
@@ -72,7 +71,7 @@ class Bot(Player):
         enemy_dist = self.dist(self.enemy)
 
         if min_bullet is None:
-            return (enemy_dist, (WIDTH-1, HEIGHT-1)), min_bullet
+            return (enemy_dist, (WIDTH - 1, HEIGHT - 1)), min_bullet
         else:
             return (enemy_dist, self.dist(min_bullet)), min_bullet
 
@@ -107,5 +106,3 @@ class Bot(Player):
             self.dodge_bullet(bullet, obs)
         else:
             self.move_choice(obs)
-
-

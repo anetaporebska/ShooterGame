@@ -3,15 +3,13 @@ import pygame
 
 class Bullet:
     def __init__(self, x, y, movement_speed, color, player, orientation, range):
-        # pozycja początkowa pocisku to niech będzie może środek gracza (z tej strony w którą jest skierowany)
-
         self.position_x = x
         self.position_y = y
         self.movement_speed = movement_speed
-        self.color = color # kolor chyba powinna mieć taki jak gracz
+        self.color = color
         self.size_x = 5
         self.size_y = 5
-        self.player = player   # 1 lub 2 w zależności który gracz wystrzelił pocisk
+        self.player = player
         self.orientation = orientation
         self.range = range
         self.distance = 0

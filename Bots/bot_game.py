@@ -18,33 +18,31 @@ def run_AI_game(bot=AI_bot, map=1):
     q_table = None
     board = None
 
-    INITIAL_HP = 100
-    BOOSTERS_PER_SECOND = 0.1  # Statystycznie
+    initial_hp = 100
+    boosters_per_second = 0.1
 
-    WIDTH = 1000
-    HEIGHT = 600
+    width = 1000
+    height = 600
 
-    INITIAL_POSITION_1 = (51, 51)
-    INITIAL_POSITION_2 = (WIDTH - 101, HEIGHT - 101)
+    initial_position_1 = (51, 51)
+    initial_position_2 = (width - 101, height - 101)
 
-    BLOCK_SIZE = 50
-    BOARD_WIDTH = int(WIDTH / BLOCK_SIZE)
-    BOARD_HEIGHT = int(HEIGHT / BLOCK_SIZE)
+    block_size = 50
+    board_width = int(width / block_size)
+    board_height = int(height / block_size)
 
-    WINDOW = pygame.display.set_mode((WIDTH, HEIGHT + 40))  # +20 wysokości na paski życia +20 na amunicję
+    window = pygame.display.set_mode((width, height + 40))
     pygame.display.set_caption("Shooter Game")
 
-    FPS = 100
+    fps = 100
     active_bullets = ActiveBullets()
-    SHOOT_COOLDOWN = 500
-    SWITCH_COOLDOWN = 100
+    shoot_cooldown = 500
+    switch_cooldown = 100
 
     DOWN = Direction.DOWN
     UP = Direction.UP
     LEFT = Direction.LEFT
     RIGHT = Direction.RIGHT
-
-    # player1 - AWSD + Space + left shift
 
     player1_shoot_time = None
     player2_shoot_time = None
@@ -53,30 +51,29 @@ def run_AI_game(bot=AI_bot, map=1):
     def initialize_game(bot):
         nonlocal player1, player2, player1_health_bar, player2_health_bar, q_table, board
 
-        board = Board(BOARD_WIDTH, BOARD_HEIGHT, MAP_VERSION, BLOCK_SIZE)
-        player1 = Player(INITIAL_HP, INITIAL_POSITION_1, board, BLOCK_SIZE, 1, (255, 175, 0))
+        board = Board(board_width, board_height, map_version, block_size)
+        player1 = Player(initial_hp, initial_position_1, board, block_size, 1, (255, 175, 0))
 
         if bot == AI_bot:
             with open("Bots/q_table.pickle", "rb") as f:
                 q_table = pickle.load(f)
-            player2 = bot(INITIAL_HP, INITIAL_POSITION_2, board, BLOCK_SIZE, 2, (54, 52, 255), player1, active_bullets)
+            player2 = bot(initial_hp, initial_position_2, board, block_size, 2, (54, 52, 255), player1, active_bullets)
             q_table = player2.q_table
         else:
-            player2 = bot(INITIAL_HP, INITIAL_POSITION_2, board, BLOCK_SIZE, 2, (54, 52, 255), player1, active_bullets)
+            player2 = bot(initial_hp, initial_position_2, board, block_size, 2, (54, 52, 255), player1, active_bullets)
 
-        player1_health_bar = HealthBar(INITIAL_HP, 50, HEIGHT, player1.color)
-        player2_health_bar = HealthBar(INITIAL_HP, WIDTH - 150, HEIGHT, player2.color)
-
+        player1_health_bar = HealthBar(initial_hp, 50, height, player1.color)
+        player2_health_bar = HealthBar(initial_hp, width - 150, height, player2.color)
 
     def redraw_window():
-        WINDOW.fill((0, 0, 0))
-        board.draw(WINDOW)
+        window.fill((0, 0, 0))
+        board.draw(window)
         active_bullets.move(board, player1, player2)
-        active_bullets.draw(WINDOW)
-        player1.draw(WINDOW)
-        player2.draw(WINDOW)
-        player1_health_bar.update(player1.HP, WINDOW)
-        player2_health_bar.update(player2.HP, WINDOW)
+        active_bullets.draw(window)
+        player1.draw(window)
+        player2.draw(window)
+        player1_health_bar.update(player1.HP, window)
+        player2_health_bar.update(player2.HP, window)
         pygame.display.update()
 
     def manage_keys_pressed():
@@ -94,16 +91,16 @@ def run_AI_game(bot=AI_bot, map=1):
             player1.move(RIGHT, player2)
         if keys[pygame.K_SPACE]:
             t = pygame.time.get_ticks()
-            if player1_shoot_time + SHOOT_COOLDOWN < t:
+            if player1_shoot_time + shoot_cooldown < t:
                 player1.shoot(active_bullets)
                 player1_shoot_time = t
         if keys[pygame.K_LSHIFT]:
             t = pygame.time.get_ticks()
-            if player1_switch_time + SWITCH_COOLDOWN < t:
+            if player1_switch_time + switch_cooldown < t:
                 player1.switch_weapon()
                 player1_switch_time = t
         t = pygame.time.get_ticks()
-        if player2_shoot_time + SHOOT_COOLDOWN < t and player2.shoot_decision():
+        if player2_shoot_time + shoot_cooldown < t and player2.shoot_decision():
             player2.shoot(active_bullets)
             player2_shoot_time = t
 
@@ -119,7 +116,7 @@ def run_AI_game(bot=AI_bot, map=1):
         player1_switch_time = pygame.time.get_ticks()
 
         while run:
-            clock.tick(FPS)
+            clock.tick(fps)
             redraw_window()
 
             for event in pygame.event.get():
@@ -139,10 +136,10 @@ def run_AI_game(bot=AI_bot, map=1):
                 end_game("Player 1 won!", player1.color)
                 run = False
             a = random()
-            if a < BOOSTERS_PER_SECOND / FPS:
+            if a < boosters_per_second / fps:
                 board.spawn_booster(player1, player2)
 
-    MAP_VERSION = map
+    map_version = map
     initialize_game(bot)
     if bot == AI_bot:
         q_table = player2.q_table

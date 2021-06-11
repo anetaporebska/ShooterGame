@@ -17,7 +17,7 @@ class Weapon:
         self.ammunition += amount
 
     def draw(self, window, x, y):
-        size = 300  # szerokość paska na amunicję
+        size = 300
         single_width = size // self.max_ammo - 1
         single_height = 20
         draw.rect(window, (0, 0, 0), (x, y, size, single_height))

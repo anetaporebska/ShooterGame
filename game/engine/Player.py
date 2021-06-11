@@ -9,14 +9,14 @@ INITIAL_SHOOT_DAMAGE = 10
 class Player:
 
     def __init__(self, HP: int, initial_position, board, block_size, no, color):
-        self.no = no  # numer gracza (1 lub 2)
+        self.no = no
         self.maxHP = HP
         self.HP = HP
         self.movementSpeed = 1
         self.movementBoost = 0
         self.shootingSpeed = 1.5
         self.shootingSpeedBoost = 0
-        self.orientation = Direction.UP  # orientacja, w która stronę jest zwrócony (zależna od ostatniego ruchu)
+        self.orientation = Direction.UP
         self.position_x = initial_position[0]
         self.position_y = initial_position[1]
         self.block_size = block_size
@@ -24,7 +24,7 @@ class Player:
         self.board = board
         self.color = color
         self.weapons = [Weapon(200, 1, 1, 100, (255, 0, 152)), Weapon(100, 2, 2, 10, (255, 0, 82)),
-                        Weapon(500, 1, 2, 20, (152, 0, 82))]  # TODO dobrać sensowne parametry
+                        Weapon(500, 1, 2, 20, (152, 0, 82))]
         self.weapon_idx = 0
         self.current_weapon = self.weapons[self.weapon_idx]
         if self.no == 1:
@@ -50,39 +50,32 @@ class Player:
 
         lower_right_x = new_x + self.block_size
         lower_right_y = new_y + self.block_size
-        # lewy górny
+
         if y <= new_y <= y + self.block_size and x <= new_x <= x + self.block_size:
             return True
 
-        # prawy dolny
         if y <= lower_right_y <= y + self.block_size and x <= lower_right_x <= x + self.block_size:
             return True
 
-        # prawy górny
         if y <= new_y <= y + self.block_size and x <= lower_right_x <= x + self.block_size:
             return True
 
-        # lewy dolny
         if y <= lower_right_y <= y + self.block_size and x <= new_x <= x + self.block_size:
             return True
 
         return False
 
-    # czy nie wychodzi poza okienko
     def check_inside_window(self, new_position_x, new_position_y):
         lower_right_x = new_position_x + self.block_size
         lower_right_y = new_position_y + self.block_size
 
-        # lewy górny
         if new_position_x < 0 or new_position_y < 0:
             return False
 
-        # prawy dolny
         if lower_right_x >= self.board.width * self.block_size or lower_right_y >= self.board.height * self.block_size:
             return False
         return True
 
-    # czy nie wchodzi w ściane
     def check_wall(self, new_position_x, new_position_y):
         lower_right_x = new_position_x + self.block_size
         lower_right_y = new_position_y + self.block_size
@@ -104,8 +97,6 @@ class Player:
         elif booster.type.get_name() == "newShoes":
             self.movementSpeed += 0.5
             self.movementBoost = booster.type.get_time()
-        # elif booster.type.get_name() == "rapidFire":
-
         elif booster.type.get_name() == "fasterBullets":
             self.shootingSpeed += 0.5
             self.shootingSpeedBoost = booster.type.get_time()
@@ -138,7 +129,7 @@ class Player:
 
         new_position_x = self.position_x + change_x * self.movementSpeed
         new_position_y = self.position_y + change_y * self.movementSpeed
-        # sprawdzam czy nie wchodzi w drugiego gracza
+
         if self.check_collision(new_position_x, new_position_y, other_player):
             return
 
