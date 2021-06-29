@@ -1,11 +1,11 @@
 import pickle
 import pygame
-from game.engine.Player import Player
-from game.environment.Board import Board
-from game.engine.bullets import ActiveBullets
-from game.engine.health_bar import HealthBar
-from game.environment.Directions import Direction
-from Bots.AI_bot import AI_bot
+from game.player.player import Player
+from game.environment.board import Board
+from game.player.bullets import ActiveBullets
+from game.player.health_bar import HealthBar
+from game.environment.directions import Direction
+from game.bots.ai_bot import AI_bot
 import numpy as np
 
 
@@ -129,5 +129,5 @@ def run_train_AI():
         print("Episode: ", i + 1, )
         train_AI(i)
         player2.update_epsilon()
-    with open("Bots/q_table.pickle", "wb") as f:
+    with open("bots/q_table.pickle", "wb") as f:
         pickle.dump(q_tabl, f)

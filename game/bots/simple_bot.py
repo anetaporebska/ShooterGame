@@ -1,6 +1,6 @@
-from game.engine.Player import Player
-from game.environment.Directions import Direction
-from game.engine.weapons import Weapon
+from game.player.player import Player
+from game.environment.directions import Direction
+from game.player.weapons import Weapon
 import numpy as np
 
 UP = Direction.UP

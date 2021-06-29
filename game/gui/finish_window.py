@@ -35,7 +35,7 @@ def end_game(text, col):
         if try_again.collidepoint((mouse_x, mouse_y)) and click:
             run = False
             pygame.quit()
-            from game.gui.welcomeWindow import run_main_menu
+            from game.gui.welcome_window import run_main_menu
             run_main_menu()
 
         if quit_button.collidepoint((mouse_x, mouse_y)) and click:

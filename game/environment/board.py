@@ -1,5 +1,5 @@
-from game.environment.Field import Field
-from game.environment.Wall import Wall
+from game.environment.field import Field
+from game.environment.wall import Wall
 from game.environment.boosters import Boosters
 from random import randrange
 

@@ -1,7 +1,7 @@
 import pygame
-from game.engine.bullets import Bullet
-from game.engine.weapons import Weapon
-from game.environment.Directions import Direction
+from game.player.bullets import Bullet
+from game.player.weapons import Weapon
+from game.environment.directions import Direction
 
 INITIAL_SHOOT_DAMAGE = 10
 

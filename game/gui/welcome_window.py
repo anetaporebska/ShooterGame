@@ -1,8 +1,8 @@
 import pygame
 from pygame.locals import *
-from game.engine.Game import run_game
-from Bots.bot_game import run_AI_game
-from Bots.Bot1 import Bot
+from game.engine.game import run_game
+from game.bots.simple_bot import Bot
+from game.bots.ai_bot import AI_bot
 
 
 def run_main_menu():
@@ -28,7 +28,7 @@ def run_main_menu():
         pygame.draw.rect(window, (70, 70, 70), simple_bot_game)
         pygame.draw.rect(window, (70, 70, 70), AI_bot_game)
 
-        two_player_text = font.render("Two players game", True, (255, 255, 255))
+        two_player_text = font.render("Two player game", True, (255, 255, 255))
         window.blit(two_player_text, (175, 115))
 
         two_player_text = font.render("Simple bot game", True, (255, 255, 255))
@@ -45,12 +45,12 @@ def run_main_menu():
         if simple_bot_game.collidepoint((mouse_x, mouse_y)) and click:
             run = False
             pygame.quit()
-            run_AI_game(Bot)
+            run_game(Bot)
 
         if AI_bot_game.collidepoint((mouse_x, mouse_y)) and click:
             run = False
             pygame.quit()
-            run_AI_game()
+            run_game(AI_bot)
 
         if run:
             for event in pygame.event.get():

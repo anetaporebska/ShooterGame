@@ -1,3 +1,3 @@
-from game.gui.welcomeWindow import run_main_menu
+from game.gui.welcome_window import run_main_menu
 
 run_main_menu()
