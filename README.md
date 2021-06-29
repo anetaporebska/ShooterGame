@@ -13,5 +13,5 @@ Players can fight with each other using different kinds of weapons and level up 
 - pickle
 
 
-### Screenshot!
-[game_screenshot](https://user-images.githubusercontent.com/57232206/123749508-cde5c600-d8b5-11eb-86fc-4ef4ce282b11.png)
+### Screenshot
+![game_screenshot](https://user-images.githubusercontent.com/57232206/123749508-cde5c600-d8b5-11eb-86fc-4ef4ce282b11.png)
